@@ -1,0 +1,6 @@
+allow user to drag box?
+
+clean data so accents don't make it think it's a new word (e.g. PatroN)
+
+make functions
+read projection code

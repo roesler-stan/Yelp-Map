@@ -1,0 +1,14 @@
+top issue: lag between click and choosing box to show - need to make sure it's the same one
+
+use generator to go through reviews?
+	need to go both directions
+	store the object globally rather than pass with arguments?
+	maybe hoverintent is slow?  has to tell the server that hovering is over?
+	or maybe the temporary box is blocking clicking - it seems like clicking isn't possible sometimes
+		remove_temporary whenever ANYTHING is clicked?
+		but then the user will have to click AGAIN to get the dot
+	solution: but the box ABOVE the dot
+	allow user to cache business data
+
+let window size be larger if console is open
+	maybe also use browser/window size?

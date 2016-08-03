@@ -1,0 +1,30 @@
+<!-- http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922
+https://bl.ocks.org/mbostock/3887118 -->
+
+<!DOCTYPE html>
+
+<head>
+<title>Yelp Reviews</title>
+<meta charset="utf-8">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.hoverIntent.js') }}"></script>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='font-awesome/css/font-awesome.min.css') }}">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+	{% block content %}{% endblock %}
+
+<!-- The block content begins inside the header and includes the end of the body -->
+
+</html>
