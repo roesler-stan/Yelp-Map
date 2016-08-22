@@ -9,7 +9,6 @@ import datetime
 
 application = Flask(__name__)
 app = application
-app.secret_key = 'hello90kat90*K'  
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://' \
 + os.environ['RDS_USERNAME'] + ':' + os.environ['RDS_PASSWORD'] +'@' + os.environ['RDS_HOSTNAME'] + \

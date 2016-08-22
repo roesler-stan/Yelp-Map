@@ -42,7 +42,6 @@ $(document).ready(function() {
 	// amount to shift map up
 	var translate_up = 50;
 	var map_height = window_height - translate_up - (2 * note_margin2);
-
 	// amount to shift map left
 	var translate_left = width / 25;
 	// how much to magnify map of US
@@ -323,6 +322,10 @@ $(document).ready(function() {
 			.enter()
 			.append("circle")
 			.style("cursor", "pointer")
+			.attr("visible_tag", function(d) {
+				d.category_correct = 1;
+				d.source_correct = 1;
+			})
 			.attr("cx", function(d) {
 				var location = projection([d.lon, d.lat]);
 				return location[0];
@@ -363,7 +366,7 @@ $(document).ready(function() {
 				.style("cursor", "pointer")
 				.on("click", function() {
 					var source = 'both';
-					update_data(category, source);
+					update_source(source);
 					d3.select('#both_text').style("fill", "white");
 					d3.select('#academic_text').style("fill", "black");
 					d3.select('#scraped_text').style("fill", "black");
@@ -386,7 +389,7 @@ $(document).ready(function() {
 				.style("cursor", "pointer")
 				.on("click", function() {
 					var source = 'both';
-					update_data(category, source);
+					update_source(source);
 					d3.select('#both_text').style("fill", "white");
 					d3.select('#academic_text').style("fill", "black");
 					d3.select('#scraped_text').style("fill", "black");
@@ -411,7 +414,7 @@ $(document).ready(function() {
 				.style("cursor", "pointer")
 				.on("click", function() {
 					var source = 'Academic';
-					update_data(category, source);
+					update_source(source);
 					d3.select('#both_text').style("fill", "black");
 					d3.select('#academic_text').style("fill", "white");
 					d3.select('#scraped_text').style("fill", "black");
@@ -433,7 +436,7 @@ $(document).ready(function() {
 				.style("cursor", "pointer")
 				.on("click", function() {
 					var source = 'Academic';
-					update_data(category, source);
+					update_source(source);
 					d3.select('#both_text').style("fill", "black");
 					d3.select('#academic_text').style("fill", "white");
 					d3.select('#scraped_text').style("fill", "black");
@@ -458,7 +461,7 @@ $(document).ready(function() {
 				.style("cursor", "pointer")
 				.on("click", function() {
 					var source = 'Scraped';
-					update_data(category, source);
+					update_source(source);
 					d3.select('#both_text').style("fill", "black");
 					d3.select('#academic_text').style("fill", "black");
 					d3.select('#scraped_text').style("fill", "white");
@@ -480,7 +483,7 @@ $(document).ready(function() {
 				.style("cursor", "pointer")
 				.on("click", function() {
 					var source = 'Scraped';
-					update_data(category, source);
+					update_source(source);
 					d3.select('#both_text').style("fill", "black");
 					d3.select('#academic_text').style("fill", "black");
 					d3.select('#scraped_text').style("fill", "white");
@@ -509,28 +512,28 @@ $(document).ready(function() {
 				.attr("height", 18)
 				.style("fill", color)
 				.on("click", function(d) {
-					category = category_to_name[d];
-					update_data(category, source);
+					var category = category_to_name[d];
+					update_category(category);
 				});
 
 			legend.append("text")
+				.attr("id", "category-text")
 				.attr("x", width - legend_margin - 6)
 				.attr("y", categories_top + 9)
-				// .attr("y", 9)
 				.attr("dy", ".35em")
 				.style("text-anchor", "end")
 				.text(function(d) { return category_to_name[d]; })
 				.style("font-size", "13px")
 				.style("font-weight", function(d) {
-					if (category_to_name[d] == category) {
+					if (category_to_name[d] == "All") {
 						return "bold";
 					} else {
 						return "normal";
 					}
 				})
 				.on("click", function(d)  {
-					category = category_to_name[d];
-					update_data(category, source);
+					var category = category_to_name[d];
+					update_category(category);
 				});
 
 		g.append("text")
@@ -555,20 +558,34 @@ $(document).ready(function() {
 		svg.call(zoom).call(zoom.event);
 	};
 
-	function update_data(category, source) {
+	function update_source(source) {
 		d3.selectAll("circle")
 			.style("opacity", function(d) {
-				if ((d.cat == category || category == "All") && (d.type == source || source == "both")) {
-					return 0.9;
-				} else {
+				if (d.type != source & source != "both") {
+					d.source_correct = 0;
 					return 0;
+				} else {
+					d.source_correct = 1;
+				}
+				if (d.category_correct == 0) {
+					return 0;
+				}
+				if (d.category_correct == 1) {
+					return 0.9;
 				}
 			})
 			.style("pointer-events", function(d) {
-				if ((d.cat == category || category == "All") && (d.type == source || source == "both")) {
-					return "all";
-				} else {
+				if (d.type != source & source != "both") {
+					d.source_correct = 0;
 					return "none";
+				} else {
+					d.source_correct = 1;
+				}
+				if (d.category_correct == 0) {
+					return "none";
+				}
+				if (d.category_correct == 1) {
+					return "all";
 				}
 			});
 
@@ -578,9 +595,50 @@ $(document).ready(function() {
 			source_title = source;
 		}
 
-		// title = source_title + " Data - " + category + " Restaurants (" + business_data.length.toLocaleString('en') + ")";
-		title = source_title + " Data - " + category + " Restaurants";
+		// title = source_title + " Data (" + business_data.length.toLocaleString('en') + ")";
+		title = source_title + " Data";
 	    d3.select("#title").text(title);
+	}
+
+	function update_category(category) {
+		d3.selectAll("circle")
+			.style("opacity", function(d) {
+				if ((d.cat != category) & (category != "All")) {
+					d.category_correct = 0;
+					return 0;
+				} else {
+					d.category_correct = 1;
+				}
+				if (d.source_correct == 0) {
+					return 0;
+				}
+				if (d.source_correct == 1) {
+					return 0.9;
+				}
+			})
+			.style("pointer-events", function(d) {
+				if ((d.cat != category) & (category != "All")) {
+					d.category_correct = 0;
+					return "none";
+				} else {
+					d.category_correct = 1;
+				}
+				if (d.source_correct == 0) {
+					return "none";
+				}
+				if (d.source_correct == 1) {
+					return "all";
+				}
+			});
+
+		d3.selectAll("#category-text")
+			.style("font-weight", function(d) {
+				if (category_to_name[d] == category) {
+					return "bold";
+				} else {
+					return "normal";
+				}
+			});
 	}
 
 	// If the drag behavior prevents the default click,
