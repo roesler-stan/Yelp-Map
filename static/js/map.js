@@ -62,7 +62,7 @@ $(document).ready(function() {
 	var current_color_rgb = "#54278f";
 
 	var source_title = 'Academic and Scraped';
-	var title = "Academic and Scraped Data - All Restaurants"
+	var title = "Academic and Scraped Data";
 
 	function make_business_text(name, city, state) {
 		var text = '<span style="font-size: 120%; font-weight: bold">' + name + '</span>' +
@@ -552,7 +552,8 @@ $(document).ready(function() {
 			.style("font-size", "12px")
 			.html('Data are from Yelp.com\'s <a style="fill: #1f77b4;" href="https://www.yelp.com/dataset_challenge" target="_blank">Academic Dataset</a> and Yelp.com. Code is adapted from <a style="fill: #1f77b4;" href="http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922" target="_blank">Michelle Chandra\'s code</a> and several D3 tutorials.');
 
-		title = source_title + " Data - " + category + " Restaurants (" + business_data.length.toLocaleString('en') + ")";
+		// title = source_title + " Data (" + business_data.length.toLocaleString('en') + ")";
+		title = source_title + " Data";
 	    d3.select("#title").text(title);
 
 		svg.call(zoom).call(zoom.event);
@@ -595,7 +596,6 @@ $(document).ready(function() {
 			source_title = source;
 		}
 
-		// title = source_title + " Data (" + business_data.length.toLocaleString('en') + ")";
 		title = source_title + " Data";
 	    d3.select("#title").text(title);
 	}
