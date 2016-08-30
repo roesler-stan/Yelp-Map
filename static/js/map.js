@@ -240,6 +240,8 @@ $(document).ready(function() {
 			svg.transition()
 				.duration(750)
 				.call(zoom.translate([0, 0]).scale(1).event);
+
+			g.selectAll("circle").attr("r", 2.75);
 		}
 
 		function clicked(d) {
@@ -258,6 +260,8 @@ $(document).ready(function() {
 			svg.transition()
 				.duration(750)
 				.call(zoom.translate(translate).scale(scale).event);
+
+			g.selectAll("circle").attr("r", 1.5);
 		}
 
 		function zoomed() {
@@ -334,7 +338,7 @@ $(document).ready(function() {
 				var location = projection([d.lon, d.lat]);
 				return location[1];
 			})
-			.attr("r", 3)
+			.attr("r", 2.75)
 			.style("fill", function(d) { return color(category_to_number[d.cat]) })
 			.style("opacity", 0.4)
 			.attr("color", function(d) { return color(category_to_number[d.cat]); })
