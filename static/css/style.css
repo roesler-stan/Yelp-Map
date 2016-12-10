@@ -37,6 +37,7 @@ div.tooltip {
 body {
 	font-size: 11px;
 	font-family: FontAwesome;
+	overflow: hidden;
 }
 
 #title {

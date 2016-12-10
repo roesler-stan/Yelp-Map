@@ -49,20 +49,22 @@ def data():
     elif dtype == 'business':
         query_results = Businesses.query.all()
         data_json = json.dumps([{'business_id': row.business_id, 'type': row.type, 'lat': row.lat, 'lon': row.lon, 'cat': row.cat,
-            'city': row.city, 'state': row.state, 'name': row.name} for row in query_results])
+            'city': row.city, 'state': row.state, 'name': row.name, 'stars': row.stars, 'dollars': row.dollars} for row in query_results])
         return data_json
 
     # Return reviews for that business
     elif dtype == 'reviews':
         query_results = Reviews.query.filter(db.and_(Reviews.business_id == business_id, Reviews.type == business_type)).all()
-        data_json = json.dumps([{'review_id': row.review_id, 'type': row.type, 'business_id': row.business_id, 'text': row.text, 'uname': row.uname} for row in query_results])
+        data_json = json.dumps([{'review_id': row.review_id, 'type': row.type, 'business_id': row.business_id,
+            'text': row.text, 'uname': row.uname, 'stars': row.stars} for row in query_results])
         return data_json
 
 class Businesses(db.Model):
     __tablename__ = 'businesses'
     
-    business_id = db.Column(db.String(100), primary_key = True)
-    type = db.Column(db.String(10), primary_key = True)
+    # Having type is not really necessary, b/c business IDs do not overlap
+    business_id = db.Column(db.String(100), primary_key=True)
+    type = db.Column(db.String(10), primary_key=True)
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
     cat = db.Column(db.String(30))
@@ -87,9 +89,9 @@ class Businesses(db.Model):
 class Reviews(db.Model):
     __tablename__ = 'reviews'
 
-    review_id = db.Column(db.String(80), primary_key = True)
-    type = db.Column(db.String(10), primary_key = True)
-    business_id = db.Column(db.String(100))
+    review_id = db.Column(db.String(80), primary_key=True)
+    type = db.Column(db.String(10), primary_key=True)
+    business_id = db.Column(db.String(100), index=True)
     text = db.Column(db.String(5500))
     uname = db.Column(db.String(100))
     stars = db.Column(db.Float)

@@ -289,7 +289,7 @@ $(document).ready(function() {
 		    .attr("height", window_height)
 		    .on("click", reset);
 
-	    d3.select("#title").on("click", reset);
+	    // d3.select("#title").on("click", reset);
 
 		var g = svg.append("g");
 
@@ -319,7 +319,7 @@ $(document).ready(function() {
 			.on("zoom", zoomed);
 
 		// shuffle the data with each update
-		// business_data = shuffle(business_data);
+		business_data = shuffle(business_data);
 
 		g.selectAll("circle")
 			.data(business_data)
@@ -562,7 +562,6 @@ $(document).ready(function() {
 
 		svg.call(zoom).call(zoom.event);
         d3.select("#loading").remove();
-        // d3.select("#loading").style("width", "0px").style("height", "0px");
 	};
 
 	function update_source(source) {
@@ -657,7 +656,7 @@ $(document).ready(function() {
 		$.getJSON($SCRIPT_ROOT + "/data",
 			{dtype: 'reviews', business_id: business_data.business_id, business_type: business_data.type},
 			function(data) {
-				draw_reviews(data, business_data, circle_data)
+				draw_reviews(data, business_data, circle_data);
 			}
 		);
 	}
