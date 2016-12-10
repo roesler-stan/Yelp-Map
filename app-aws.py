@@ -6,21 +6,17 @@ from sqlalchemy.sql.expression import func, select
 import os
 import json
 import datetime
-from socket import gethostname
 
 application = Flask(__name__)
 app = application
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/yelp2016'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://' \
++ os.environ['RDS_USERNAME'] + ':' + os.environ['RDS_PASSWORD'] +'@' + os.environ['RDS_HOSTNAME'] + \
+':' + os.environ['RDS_PORT'] + '/' + os.environ['RDS_DB_NAME']
 
-# SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-#     username="katharina",
-#     password="secureYelp16",
-#     hostname="katharina.mysql.pythonanywhere-services.com",
-#     databasename="katharina$yelp2016",
-# )
-# app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-# app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://' + RDS_USERNAME + ':' + RDS_PASSWORD +'@' + RDS_HOSTNAME + ':' + RDS_PORT + '/' + RDS_DB_NAME
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "postgres://localhost")
 
 db = SQLAlchemy(app)
 
@@ -60,7 +56,7 @@ def data():
 
 class Businesses(db.Model):
     __tablename__ = 'businesses'
-    
+
     business_id = db.Column(db.String(100), primary_key = True)
     type = db.Column(db.String(10), primary_key = True)
     lat = db.Column(db.Float)
@@ -69,10 +65,8 @@ class Businesses(db.Model):
     city = db.Column(db.String(80))
     state = db.Column(db.String(5))
     name = db.Column(db.String(200))
-    stars = db.Column(db.Float)
-    dollars = db.Column(db.Float)
 
-    def __init__(self, business_id, type, lat, lon, cat, city, state, name, stars, dollars):
+    def __init__(self, business_id, type, lat, lon, cat, city, state, name):
         self.business_id = business_id
         self.type = type
         self.lat = lat
@@ -81,8 +75,9 @@ class Businesses(db.Model):
         self.city = city
         self.state = state
         self.name = name
-        self.stars = stars
-        self.dollars = dollars
+
+    # def __repr__(self):
+    #     return "'business_id': {}, type: {}, lat: {} lon: {}, cat: {}, city: {}, state: {}, name: {}".format(self.business_id, self.type, self.lat, self.lon, self.cat, self.city, self.state, self.name)
 
 class Reviews(db.Model):
     __tablename__ = 'reviews'
@@ -92,16 +87,16 @@ class Reviews(db.Model):
     business_id = db.Column(db.String(100))
     text = db.Column(db.String(5500))
     uname = db.Column(db.String(100))
-    stars = db.Column(db.Float)
 
-    def __init__(self, review_id, type, business_id, text, uname, stars):
+    def __init__(self, review_id, type, business_id, text, uname):
         self.review_id = review_id
         self.type = type
         self.business_id = business_id
         self.text = text
         self.uname = uname
-        self.stars = stars
+
+    # def __repr__(self):
+    #     return "'review_id': {}, 'type': {}, 'business_id': {}, 'text': {}, 'uname': {}".format(self.review_id, self.type, self.business_id, self.text, self.uname)
 
 if __name__ == "__main__":
-    if 'liveconsole' not in gethostname():
-        app.run(debug = False)
+    app.run(debug = False)

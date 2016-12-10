@@ -561,6 +561,8 @@ $(document).ready(function() {
 	    d3.select("#title").text(title);
 
 		svg.call(zoom).call(zoom.event);
+        d3.select("#loading").remove();
+        // d3.select("#loading").style("width", "0px").style("height", "0px");
 	};
 
 	function update_source(source) {
@@ -675,8 +677,10 @@ $(document).ready(function() {
 				$.getJSON($SCRIPT_ROOT + "/data",
 					{dtype: 'business'},
 					function(business_data) {
+				        // document.getElementById("loading").style.width = "0%";
 						add_data(map_data, business_data, projection);
-					});
+					}
+				);
 			}
 		);
 	}

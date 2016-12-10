@@ -1,6 +1,23 @@
+.loading-main-container {
+  float: left;
+  position: absolute;
+  left: 43%;
+  top: 30%;
+}
+.loading-fixer-container {
+  width: 200px;
+  height: 200px;
+  float: left;
+  position: absolute;
+  z-index: 2;
+  overflow: hidden;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  background: url(../box.gif) no-repeat;
+}
+
 /* Style for Custom Tooltip */
-div.tooltip {   
- 	position: absolute;           
+div.tooltip {
+ 	position: absolute;
 	text-align: center;
 	width: auto;
 	height: auto;                 
