@@ -11,16 +11,16 @@ from socket import gethostname
 application = Flask(__name__)
 app = application
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/yelp2016'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/yelp2016'
 
-# SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-#     username="katharina",
-#     password="secureYelp16",
-#     hostname="katharina.mysql.pythonanywhere-services.com",
-#     databasename="katharina$yelp2016",
-# )
-# app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-# app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+    username="katharina",
+    password="secureYelp16",
+    hostname="katharina.mysql.pythonanywhere-services.com",
+    databasename="katharina$yelp2016",
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 
 db = SQLAlchemy(app)
 
